@@ -1,0 +1,60 @@
+gmail backup
+Author: Richard Tew <richard.m.tew@gmail.com>
+
+LICENSING:
+
+This project is released under the terms of the MIT license, which
+you should find included in the LICENSE file.
+
+USAGE:
+
+This is how I use it currently, note that it requires you to have this
+directory as your current working one:
+
+ 0. Edit updateCache.py and set 'backupSearchResults' to True.
+ 1. Open a DOS command window.
+ 2. cd into this directory
+ 3. python updateCache.py
+ 4. enter your user name.
+ 5. enter your password.
+ 6. wait.
+
+ At this point given a lot of mails and threads to process, gmail
+ may lock you out.  If it is in a way I have not encountered, then
+ you will need to repair the data.  If it is in a way I have
+ encountered and I expect it would be, then you need to wait until
+ the account is unlocked and retry.
+
+ This is the reason why it is safer to enable the backup of search
+ results.  Because in order to reduce the load on the gmail server
+ and prevent your account being locked, the script proactively
+ saves out the information fetched.  Do not delete this cached
+ data when it prompts until you are sure the account has been
+ updated.
+
+In order to use the 'updateCache.py' script, you will need to have
+libgmail installed, which you can obtain from:
+
+  http://libgmail.sourceforge.net/
+  
+There are further comments at the top of the 'updateCache.py' file.
+
+POTENTIAL PROBLEMS:
+
+You may have to tweak the script to get it to work.  I backed up my
+account while developing it, and do not know how it handles backing
+up an account from the beginning.  Let me know if this is beyond
+you, if it does not work, and I will sort this out.
+
+WHY USE THIS SCRIPT:
+
+Quoted from my blog:
+http://nameless-sorrows.blogspot.com/2006/08/backing-up-gmail-account.html
+
+"There are a lot of interesting and useful services on the internet these
+days, like gmail and blogger. But when I take advantage of them, I cannot
+help but feel pained by the fact I am entering my content/information into
+a something controlled by someone else. There is a certain satisfaction to
+having a copy of your own information, knowing that if the service goes
+away, or changes it terms of service, you still have everything you created
+to do with as you wish."
