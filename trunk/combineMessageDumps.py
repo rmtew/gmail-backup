@@ -1,40 +1,56 @@
 import sys, os
 import cPickle
 
-messageFileNameTemplate = "messages%05d.bin"
+messageDumpFileNameTemplate = "data/messages%05d.bin"
+messageIndexFileNameTemplate = "data/messages%05d.idx"
 
 def GetMessageFileNames():
     fileNumber = 1
-    fileName = messageFileNameTemplate % fileNumber
+    dumpFileName = messageDumpFileNameTemplate % fileNumber
+    indexFileName = messageIndexFileNameTemplate % fileNumber
 
-    while os.path.exists(fileName):
-        yield fileName
+    while os.path.exists(dumpFileName):
+        yield dumpFileName, indexFileName
 
         # Set the ID and name for the next candidate.
         fileNumber += 1
-        fileName = messageFileNameTemplate % fileNumber
+        dumpFileName = messageDumpFileNameTemplate % fileNumber
+        indexFileName = messageIndexFileNameTemplate % fileNumber
+
+def ValidMessage(s):
+    if not (s is None or s.startswith("<script>")):
+        return True
+    return False
 
 
 if __name__ == "__main__":
-    # Load in the original messages:
-    # - Find any missing or bad entries.
-    # - Cache which we have.
+    # We need to delete the split files and save one bulk one.
 
-    messagesByID = {}
-    addedMessagesByID = {}
-    for fileName in GetMessageFileNames():
-        messagesByID.update(cPickle.load(open(fileName, "rb")))
+    messageFileNames = list(GetMessageFileNames())
 
-    try:
-        pass
-    finally:
-        messageFileNames = list(GetMessageFileNames())
+    if len(messageFileNames) > 1:
+        # Read in and combine all the messages.  Deleting the files.
+        messagesByID = {}
+        for dumpFileName, indexFileName in messageFileNames:
+            messagesByID.update(cPickle.load(open(dumpFileName, "rb")))
 
-        # We need to delete the split files and save one bulk one.
-        if len(messageFileNames) > 1 or messageChanges:
-            for fileName in messageFileNames:
-                os.remove(fileName)
+            if os.path.exists(dumpFileName):
+                os.remove(dumpFileName)
+            if os.path.exists(indexFileName):
+                os.remove(indexFileName)
 
-            print "Saving", len(messagesByID), "messages...",
-            cPickle.dump(messagesByID, open(messageFileNameTemplate % 1, "wb"))
-            print "done"
+        # Save out the combined dump.
+        print "Saving", len(messagesByID), "messages...",
+        cPickle.dump(messagesByID, open(messageDumpFileNameTemplate % 1, "wb"))
+        print "done"
+
+        # Build an index of the new dump.
+        wanted = {}
+        cached = {}
+        indexFileName = messageIndexFileNameTemplate % 1
+        for k, v in messagesByID.iteritems():
+            if not ValidMessage(v):
+                wanted[k] = None
+            else:
+                cached[k] = len(v)
+        cPickle.dump((wanted, cached), open(indexFileName, "wb"))
