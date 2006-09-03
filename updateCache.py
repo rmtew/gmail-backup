@@ -183,31 +183,26 @@ def ProcessSearchResult(result, data):
             print "FATAL ERROR: No messages returned for thread", thread.id
             sys.exit(1)
 
-        lastMessageID = messages[-1].id
-
         messageDataByID = data.messageIDsByThreadID.get(thread.id, None)
         if messageDataByID is not None:
-            if messageDataByID.has_key(lastMessageID):
-                # Identified a preprocessed point (hopefully).
-                data.threadID = thread.id
-                return True
-
-            expectAbsence = False
-            for msg in thread:
-                if messageDataByID.has_key(msg.id):
-                    if expectAbsence:
-                        print " WARNING: Found an unexpected message", msg.id, "in thread", thread.id
-                else:
-                    expectAbsence = True
+            foundMissing = False
+            for msg in messages:
+                if not messageDataByID.has_key(msg.id):
+                    foundMissing = True
 
                     if not data.wantedThreadMessages.has_key(thread.id):
                         data.wantedThreadMessages[thread.id] = {}
                     data.wantedThreadMessages[thread.id][msg.id] = None
                     if not data.cachedMessages.has_key(msg.id):
                         data.wantedMessages[msg.id] = None
+
+            if not foundMissing:
+                # We have all the messages already.
+                data.threadID = thread.id
+                return True
         else:
             d = data.wantedThreadMessages[thread.id] = {}
-            for msg in thread:
+            for msg in messages:
                 # Index it by thread.
                 d[msg.id] = None
                 # Note to get the full message if it is not cached already.
