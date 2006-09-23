@@ -85,7 +85,7 @@ defaultUsername = "no default" # "username@gmail.com"
 
 # If you are planning to run this over and over tweaking the script
 # you will want to take advantage of this in or
-backupSearchResults = False
+backupSearchResults = True
 
 messageDumpFileNameTemplate = "data/messages%05d.bin"
 messageIndexFileNameTemplate = "data/messages%05d.idx"
@@ -156,7 +156,7 @@ class Data:
     threadID = None
     threadTally = 0
 
-def ProcessSearchResult(result, data):
+def ProcessSearchResult(result, data, minimumToCheck=None):
     cnt = 1
     for thread in result:
         print " %05d" % cnt,
@@ -196,7 +196,10 @@ def ProcessSearchResult(result, data):
                     if not data.cachedMessages.has_key(msg.id):
                         data.wantedMessages[msg.id] = None
 
-            if not foundMissing:
+            if minimumToCheck is not None and minimumToCheck < cnt:
+                # If we are forcibly checking a minimum number of posts..
+                pass
+            elif not foundMissing:
                 # We have all the messages already.
                 data.threadID = thread.id
                 return True
@@ -331,6 +334,17 @@ if __name__ == "__main__":
 
     password = getpass("Password: ")
 
+    # Maybe some optional things...
+
+    confirm = raw_input("Select other options [n]:").strip().lower()
+    minimumToCheck = None
+    if len(confirm) and confirm[0] == 'y':
+        try:
+            minimumToCheck = int(raw_input("Forcibly check at least a given number of threads [0]:").strip().lower())
+        except:
+            print "Bad input.. restart."
+            sys.exit(1)
+
     ga = libgmail.GmailAccount(username, password)
 
     print
@@ -354,13 +368,13 @@ if __name__ == "__main__":
 
     try:
         data.wantedThreadMessages = {}
-        if not ProcessSearchResult(limitedSearchResult, data):
+        if not ProcessSearchResult(limitedSearchResult, data, minimumToCheck=minimumToCheck):
             print
             print "Pass 2: Falling back to checking all pages."
             print
 
             completeSearchResult = FetchSearchResult(ga, allPages=True)
-            ProcessSearchResult(completeSearchResult, data)
+            ProcessSearchResult(completeSearchResult, data, minimumToCheck=minimumToCheck)
         else:
             print " Skipping pass 2 as the last indexed thread was located."
 
