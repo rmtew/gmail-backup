@@ -32,24 +32,30 @@ directory as your current working one:
  data when it prompts until you are sure the account has been
  updated.
 
-In order to use the 'updateCache.py' script, you will need to have
-libgmail installed, which you can obtain from:
+All of the dependencies required, are included with the gmail-backup
+source code under the 'libgmail' directory.  These include:
 
   http://libgmail.sourceforge.net/
-  
-There are further comments at the top of the 'updateCache.py' file.
+  http://wwwsearch.sourceforge.net/mechanize
+  http://wwwsearch.sourceforge.net/ClientForm
 
+See 'README.libgmail' for information on their individual licenses.
+ 
 POTENTIAL PROBLEMS:
 
-You may have to tweak the script to get it to work.  I backed up my
-account while developing it, and do not know how it handles backing
-up an account from the beginning.  Let me know if this is beyond
-you, if it does not work, and I will sort this out.
+libgmail seems to be buggy.  I have experienced bugs in its unicode
+support.  And I've had bugs reported in its attachment handling, as
+bugs with this program.
+
+gmail may change its interface.  This may require the updating of
+the libgmail source code which comes with this, to the latest
+version, which will presumably be upgraded to deal with these
+changes.
 
 WHY USE THIS SCRIPT:
 
 Quoted from my blog:
-http://nameless-sorrows.blogspot.com/2006/08/backing-up-gmail-account.html
+http://posted-stuff.blogspot.com/2006/08/backing-up-gmail-account.html
 
 "There are a lot of interesting and useful services on the internet these
 days, like gmail and blogger. But when I take advantage of them, I cannot

@@ -1,0 +1,29 @@
+libgmail has a nest of dependencies which are awkward to locate
+and install.  The source to it, and its dependencies are lumped
+in the 'libgmail' folder.
+
+These projects have their own licenses, and are not governed in
+any way by the license for the 'gmail-backup' project.
+
+There are unicode related fixes to libgmail, given errors discovered
+in its use.
+
+libgmail
+http://libgmail.sourceforge.net
+
+  libgmail is licensed under the GPL.
+  See the file named libgmail/COPYING for more information.
+
+mechanize
+http://wwwsearch.sourceforge.net/mechanize
+
+  This code is free software; you can redistribute it and/or modify it
+  under the terms of the BSD or ZPL 2.1 licenses (see the file
+  libgmail/mechanize/COPYING.txt included with the distribution).
+
+ClientForm.py
+http://wwwsearch.sourceforge.net/ClientForm
+
+  This code is free software; you can redistribute it and/or modify it
+  under the terms of the BSD or ZPL 2.1 licenses (see the file
+  libgmail/mechanize/COPYING.txt included with the distribution).
