@@ -81,7 +81,7 @@ import cPickle
 from getpass import getpass
 from libgmail import libgmail
 
-defaultUsername = "richard.m.tew@gmail.com" # "username@gmail.com"
+defaultUsername = "no default" # "username@gmail.com"
 
 # If you are planning to run this over and over tweaking the script
 # you will want to take advantage of this in or
