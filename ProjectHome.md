@@ -1,0 +1,1 @@
+This is a set of Python scripts to backup the contents of a gmail account, and to manipulate the backed up data.
